@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://cxf.apache.org/jaxws
+	http://cxf.apache.org/schemas/jaxws.xsd">
+	
+<!--导入与CXF框架有关的xml-->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<!--布WebService接口-->
+	<jaxws:endpoint id="serviceImpl"
+		implementor="com.qzaj.serviceImpl.ServiceImpl" address="/IService">
+	</jaxws:endpoint>	
+	
+<context:annotation-config /> 
+<context:component-scan base-package="com.qzaj" />
+
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver">
+	</property>
+	<property name="url" value="jdbc:oracle:thin:@100.1.1.111:1521:orcl">
+	</property>
+<!--    <property name="url" value="jdbc:oracle:thin:@192.168.11.101:1521:orcl"> -->
+<!--  	</property> -->
+	<property name="username" value="qzaj"></property>
+	<property name="password" value="qzaj"></property>
+	<property name="initialSize" value="2" />
+	<property name="maxActive" value="30" />
+	<property name="maxIdle" value="15" />
+	<property name="minIdle" value="5" />
+	<property name="removeAbandoned" value="true" />
+	<property name="removeAbandonedTimeout" value="60" />
+	<property name="maxWait" value="10000" />
+</bean>
+<bean id="sessionFactory" 
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+	</property>
+		<property name="packagesToScan">  
+			<list>
+				<value>com.qzaj.entity</value> 
+			</list>
+		</property> 
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.Oracle9Dialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+	</property>
+	
+	</bean>
+		<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+	    <property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="dataSource1" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="com.mysql.jdbc.Driver">
+	</property>
+	<property name="url" value="jdbc:mysql://100.1.1.251:3306/qzaj">
+	</property>
+<!-- 	<property name="url" value="jdbc:mysql://localhost:3307/qzaj"> -->
+<!-- 	</property>  -->
+	<property name="username" value="root"></property>
+	<property name="password" value=""></property>
+	<property name="initialSize" value="1" />
+	<property name="maxActive" value="30" />
+	<property name="maxIdle" value="15" />
+	<property name="minIdle" value="5" />
+	<property name="removeAbandoned" value="true" />
+	<property name="removeAbandonedTimeout" value="60" />
+	<property name="maxWait" value="10000" />
+</bean>
+<bean id="sessionFactory1" 
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource1" />
+	</property>
+<property name="packagesToScan">  
+			<list>
+				<value>com.qzaj.mysql.entity</value> 
+			</list>
+		</property> 
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+	</property>
+</bean>
+
+<bean id="hibernateTemplate1" class="org.springframework.orm.hibernate3.HibernateTemplate">
+	<property name="sessionFactory" ref="sessionFactory1"></property>
+</bean>
+
+
+</beans>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="cxf_qzaj"
+  id="myeclipse.1470203020348"
+  context-root="/cxf_qzaj"
+  j2ee-spec="5.0"
+  archive="cxf_qzaj.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
